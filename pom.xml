@@ -52,9 +52,27 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>mvnrepository</id>
+			<name>Mvn Repository</name>
+			<url>http://central.maven.org/maven2/</url>
+		</repository>
+
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
+
+
+
 		<dependencies>
+
 			<!-- JBoss distributes a complete set of Java EE 6 APIs including a Bill 
 				of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection) 
 				of artifacts. We use this here so that we always get the correct versions 
@@ -211,8 +229,8 @@
 		<!-- THEMES PRIMEFACES -->
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
-			<artifactId>all-themes</artifactId>
-			<version>1.0.10</version>
+			<artifactId>rocket</artifactId>
+			<version>1.0.8</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/javax.transaction/jta -->
@@ -229,7 +247,44 @@
 			<version>2.2.6</version>
 		</dependency>
 
-		
+		<!-- LIB PARA ACESSAR WS -->
+
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>jaxrpc-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml.soap</groupId>
+			<artifactId>saaj-api</artifactId>
+			<version>1.3.1</version>
+		</dependency>
 
 
 
@@ -257,6 +312,8 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
 
 	<profiles>
 		<profile>
