@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="WEB-INF/templates/header.xhtml" />
+
+		<ui:include src="WEB-INF/templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formEditConf">
+				<p:panel
+					header="Situação da homologação Empresa #{homologacaoController.hml_situacao.homologacao.empresa.nome}">
+					<p:panelGrid columns="2" id="gridFrmCgEdit">
+
+						<h:outputText value="Situação:" />
+						<h:outputText
+							value="#{homologacaoController.hml_situacao.situacao.descricao}" />
+
+						<h:outputText value="Observação:" />
+						<h:inputTextarea
+							value="#{homologacaoController.hml_situacao.observacoes}"
+							style="width:400px;" />
+
+					</p:panelGrid>
+					<br />
+					<p:commandButton value="Atualizar"
+						action="#{homologacaoController.atualizar}" />
+					<p:commandButton value="Cancelar"
+						action="#{homologacaoController.cancelarconf}" />
+					<br />
+					<p:messages autoUpdate="true" />
+				</p:panel>
+
+
+
+			</h:form>
+		</DIV>
+		<ui:include src="WEB-INF/templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

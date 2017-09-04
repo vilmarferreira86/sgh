@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+
+	<div id="geral">
+		<ui:include src="WEB-INF/templates/header.xhtml" />
+
+		<ui:include src="WEB-INF/templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formAnalista">
+				<p:panel header="Analistas">
+					<p:panelGrid columns="2" id="gridFrmAnalista">
+						<h:outputText value="Nome:" />
+						<p:inputText id="nomeAnalista"
+							value="#{analistaController.analista.nome}" required="true"
+							requiredMessage="O nome do analista é obrigatório!" />
+
+						<h:outputText value="Cargo:" />
+						<p:inputText id="cargo"
+							value="#{analistaController.analista.cargo}" />
+
+						<p:commandButton value="Cadastrar"
+							actionListener="#{analistaController.adicionar}"
+							update="dataAnalista,gridFrmAnalista" />
+
+					</p:panelGrid>
+				</p:panel>
+
+				<p:messages id="mensagem" autoUpdate="true" />
+				<br />
+				<p:dataTable id="dataAnalista" value="#{analistaController.todas}"
+					editable="true" var="an" border="1"
+					rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+					rowIndexVar="rowIx">
+					<p:column headerText="Nome">
+						<h:outputText value="#{an.nome}" />
+					</p:column>
+
+					<p:column headerText="Cargo">
+						<h:outputText value="#{an.cargo}" />
+					</p:column>
+
+					<p:column width="10%" headerText="Operações">
+
+						<p:commandButton id="Bedit" action="#{analistaController.editar}"
+							icon="ui-icon-pencil" immediate="true" alt="Editar Registro"
+							title="Editar Registro">
+							<f:setPropertyActionListener value="#{an}"
+								target="#{analistaController.analista}" />
+						</p:commandButton>
+						|
+						<p:commandButton id="Bremove" icon="ui-icon-trash"
+							alt="Remover Registro" title="Remover Registro"
+							action="#{analistaController.remove}" update="dataAnalista"
+							immediate="true">
+							<f:setPropertyActionListener value="#{an}"
+								target="#{analistaController.analista}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</DIV>
+		<ui:include src="WEB-INF/templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

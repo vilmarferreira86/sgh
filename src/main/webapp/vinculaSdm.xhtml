@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="WEB-INF/templates/header.xhtml" />
+
+		<ui:include src="WEB-INF/templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="form">
+				<p:panel header="Vincular Chamados a SDM">
+					<p:dataList value="#{homologacaoSistemaController.selectedHmls}"
+						var="l">
+						#{l.chamado} - #{l.titulo}
+					</p:dataList>
+					<br />
+					<p:panel>
+						<p:panelGrid columns="2" id="gridVincula">
+							<p:column>
+								<h:outputText value="SDM:" />
+							</p:column>
+
+							<p:column>
+								<p:autoComplete
+									value="#{homologacaoSistemaController.hsistemas.sdm}"
+									converter="sdmConverter" style="width:400px;"
+									completeMethod="#{homologacaoSistemaController.sugerirSdm}"
+									var="sdm" itemLabel="#{sdm.numero}" itemValue="#{sdm}"
+									emptyMessage="Sdm não cadastrada." />
+							</p:column>
+
+
+
+
+						</p:panelGrid>
+						<br />
+						<h:commandButton value="Salvar" action="#{homologacaoSistemaController.geraSdm()}"
+							style="border:1px solid black; background-color: #459E00; font-weight:bold; padding: 8px;" />
+					</p:panel>
+
+
+				</p:panel>
+				<p:messages id="mensagem" autoUpdate="true" />
+				<br />
+				<p:ajaxStatus onstart="PF('statusDialog').show()"
+					onsuccess="PF('statusDialog').hide()" />
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false">
+					<p:graphicImage value="img/ajax-loader.gif" />
+
+				</p:dialog>
+
+			</h:form>
+		</DIV>
+		<ui:include src="WEB-INF/templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

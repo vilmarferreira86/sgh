@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="WEB-INF/templates/header.xhtml" />
+
+		<ui:include src="WEB-INF/templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formEditEmp">
+				<p:panel header="Cadastrar Empresas">
+					<p:panelGrid columns="2">
+						<p:column>
+							<h:outputText value="Nome:" />
+							<h:outputText value="*" style="color:red;font-weight:bold;" />
+						</p:column>
+						<p:column>
+							<p:inputText id="nomeEmpresa"
+								value="#{empresaController.empresa.nome}" required="true"
+								style="width:400px;"
+								requiredMessage="O nome da empresa é obrigatória!" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Siscad:" />
+							<h:outputText value="*" style="color:red;font-weight:bold;" />
+						</p:column>
+						<p:column>
+							<p:inputText id="siscad"
+								value="#{empresaController.empresa.siscad}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Cnpj:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="cnpj" value="#{empresaController.empresa.cnpj}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Conta:" />
+							<h:outputText value="*" style="color:red;font-weight:bold;" />
+						</p:column>
+						<p:column>
+							<p:inputText id="conta"
+								value="#{empresaController.empresa.conta}" />
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<p:fieldset legend="Contatos">
+						<fieldset>
+							<LEGEND>
+								<b>Empresa:</b>
+							</LEGEND>
+							<p:panelGrid columns="2">
+								<p:column>
+									<h:outputText value="Nome:" />
+								</p:column>
+								<p:column>
+									<p:inputText style="width:300px;"
+										value="#{empresaController.empresa.nomeContato}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Telefone:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="telefone"
+										value="#{empresaController.empresa.telefone}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Email:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="email"
+										value="#{empresaController.empresa.email}"
+										style="width:300px;" />
+								</p:column>
+							</p:panelGrid>
+						</fieldset>
+						<br />
+						<fieldset>
+							<LEGEND>
+								<b>Analista da Empresa:</b>
+							</LEGEND>
+							<p:panelGrid columns="2">
+								<p:column>
+									<h:outputText value="Nome:" />
+								</p:column>
+								<p:column>
+									<p:inputText style="width:300px;"
+										value="#{empresaController.empresa.nomeAnalista}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Telefone:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="telefoneAnalista"
+										value="#{empresaController.empresa.contatoAnalista}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Email:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="emailAnalista"
+										value="#{empresaController.empresa.emailAnalista}"
+										style="width:300px;" />
+								</p:column>
+							</p:panelGrid>
+
+						</fieldset>
+						<br />
+						<fieldset>
+							<LEGEND>
+								<b>Responsável pela transferência/receptação dos arquivos na
+									Empresa:</b>
+							</LEGEND>
+							<p:panelGrid columns="2">
+								<p:column>
+									<h:outputText value="Nome:" />
+								</p:column>
+								<p:column>
+									<p:inputText style="width:300px;"
+										value="#{empresaController.empresa.nomeResponsavel}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Telefone:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="telefoneResp"
+										value="#{empresaController.empresa.contatoResponsavel}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Email:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="emailResp"
+										value="#{empresaController.empresa.emailResponsavel}"
+										style="width:300px;" />
+								</p:column>
+							</p:panelGrid>
+
+						</fieldset>
+						<br />
+						<fieldset>
+							<LEGEND>
+								<b>Gerente de Relacionamento:</b>
+							</LEGEND>
+							<p:panelGrid columns="2">
+								<p:column>
+									<h:outputText value="Nome:" />
+								</p:column>
+								<p:column>
+									<p:inputText style="width:300px;"
+										value="#{empresaController.empresa.nomeRespAgencia}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Telefone:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="telefoneRespAgencia"
+										value="#{empresaController.empresa.telefoneRespAgencia}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Email:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="emailRespAgencia"
+										value="#{empresaController.empresa.emailRespAgencia}"
+										style="width:300px;" />
+								</p:column>
+							</p:panelGrid>
+
+						</fieldset>
+
+					</p:fieldset>
+
+
+
+
+					<br />
+					<h:outputText value="*" style="color:red;font-weight:bold;" />
+					<h:outputText value="  Campos Obrigatórios."
+						style="color:red;font-weight:bold;" />
+					<br />
+					<br />
+					<p:commandButton value="Salvar"
+						action="#{empresaController.adicionar}" />
+					<p:commandButton value="Cancelar"
+						action="#{empresaController.cancela}" immediate="true" />
+					<br />
+					<p:messages autoUpdate="true" />
+				</p:panel>
+
+
+
+			</h:form>
+		</DIV>
+		<ui:include src="WEB-INF/templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

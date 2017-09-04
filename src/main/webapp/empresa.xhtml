@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+
+	<div id="geral">
+		<ui:include src="WEB-INF/templates/header.xhtml" />
+
+		<ui:include src="WEB-INF/templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formEmpresa">
+				<p:tooltip />
+				<p:panel header="Empresas">
+					<fieldset>
+						<LEGEND>Filtro:</LEGEND>
+						<p:panelGrid columns="2" id="gridFiltro">
+							<p:column>
+								<h:outputText value="Empresa:" />
+							</p:column>
+							<p:column>
+								<p:autoComplete value="#{empresaController.empresa}"
+									converter="convEmpresa" style="width:400px;"
+									completeMethod="#{homologacaoController.sugerirEmpresas}"
+									var="emp" itemLabel="#{emp.nome}" itemValue="#{emp}"
+									emptyMessage="Empresa não cadastrada." />
+							</p:column>
+
+						</p:panelGrid>
+						<p:commandButton value="Buscar" update="dataEmpresa" />
+						<p:commandButton value="Limpar"
+							action="#{empresaController.clear}"
+							update="dataEmpresa,gridFiltro" />
+					</fieldset>
+					<p:messages id="mensagem" autoUpdate="true" />
+					<br />
+					<p:commandButton value="Cadastrar"
+						action="#{empresaController.cadastrar}" immediate="true" />
+
+					<p:dataTable id="dataEmpresa" value="#{empresaController.todas}"
+						var="em" border="1" paginatorPosition="bottom" rows="20"
+						rowsPerPageTemplate="20,40,100" paginator="true"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx">
+						<f:facet name="header">
+							<h:outputText value="Empresas Registradas" />
+						</f:facet>
+						<p:column headerText="Empresa">
+							<h:outputText value="#{em.nome}" />
+						</p:column>
+
+
+						<p:column headerText="Conta">
+							<h:outputText value="#{em.conta}" />
+						</p:column>
+
+						<p:column headerText="E-mail">
+							<h:outputText value="#{em.email}" />
+						</p:column>
+
+						<p:column width="14%" headerText="Operações">
+
+
+							<p:commandButton id="Bedit" action="#{empresaController.editar}"
+								alt="Editar Registro" title="Editar Registro"
+								icon="ui-icon-pencil" immediate="true">
+								<f:setPropertyActionListener value="#{em}"
+									target="#{empresaController.empresa}" />
+							</p:commandButton>
+						|
+						<p:commandButton id="Bremove" icon="ui-icon-trash"
+								action="#{empresaController.remove}" update="dataEmpresa"
+								alt="Remover Registro" title="Remover Registro" immediate="true">
+								<f:setPropertyActionListener value="#{em}"
+									target="#{empresaController.empresa}" />
+							</p:commandButton>
+						</p:column>
+
+
+						<f:facet name="footer">
+        					Total de registro:<h:outputText
+								value="  #{empresaController.tamanho}" />
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+
+
+
+
+				<p:ajaxStatus onstart="PF('statusDialog').show()"
+					onsuccess="PF('statusDialog').hide()" />
+
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false">
+					<p:graphicImage value="img/ajax-loader.gif" />
+
+				</p:dialog>
+			</h:form>
+		</DIV>
+		<ui:include src="WEB-INF/templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

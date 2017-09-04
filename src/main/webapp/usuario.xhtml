@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+
+	<div id="geral">
+		<DIV id="logo">
+			<p:graphicImage value="img/banco_amazonia.png" />
+		</DIV>
+		<DIV id="menu">
+			<p:menubar>
+				<p:menuitem value="Principal" url="index.faces" />
+				<p:submenu label="Menu">
+					<p:menuitem value="Agencia" url="agencia.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Analista" url="analista.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Situação" url="situacao.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Empresa" url="empresa.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Gestor" url="gestor.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+
+					<p:menuitem value="Situação Hml Sistemas"
+						url="situacaohmlsistemas.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Sistema" url="sistema.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+
+					
+				</p:submenu>
+				<p:submenu label="Homologações">
+					<p:menuitem value="CR CNAB" url="homologacao.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Sistemas" url="homologacaoSistema.faces"
+						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+
+				</p:submenu>
+				<p:submenu label="Relatórios">
+					<p:menuitem value="Cobrança" url="relatorio.faces" rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+					<p:menuitem value="Sistemas" url="relSdm.faces" rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') || facesContext.externalContext.isUserInRole('ROLE_ADMIN')}" />
+				</p:submenu>
+				
+
+				<f:facet name="options">
+					<a href="j_spring_security_logout">Logout</a>
+				</f:facet>
+			</p:menubar>
+		</DIV>
+		<DIV id="main">
+			<h:form id="formPrincipal">
+				<p:panel header="Segurança">
+					<p:panel rendered="#{usuarioController.flag==0?true:false}">
+						<p:panelGrid columns="2">
+							<p:column>
+								<h:outputText value="Usuário:" style="font-weight:bold;" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{usuarioController.usuario.username}" />
+							</p:column>
+
+							<p:column>
+								<h:outputText value="Senha Atual:" style="font-weight:bold;" />
+							</p:column>
+							<p:column>
+								<p:password id="senha_atual"
+									value="#{usuarioController.usuario.password}" />
+							</p:column>
+
+
+						</p:panelGrid>
+
+						<p:commandButton value="Validar"
+							actionListener="#{usuarioController.valida}"
+							update="formPrincipal" />
+					</p:panel>
+
+					<p:growl id="message" />
+
+
+					<p:panel header="Alterar Senha"
+						rendered="#{usuarioController.flag==1?true:false}">
+						<p:panelGrid columns="2">
+							<p:column>
+								<h:outputText value="Nova Senha:" style="font-weight:bold;" />
+							</p:column>
+							<p:column>
+								<p:password id="newpass"
+									value="#{usuarioController.usuario.password}" feedback="true" />
+							</p:column>
+
+							<p:column>
+								<h:outputText value="Repetir Nova Senha:"
+									style="font-weight:bold;" />
+							</p:column>
+							<p:column>
+								<p:password id="newpassRepeat"
+									value="#{usuarioController.usuario.password}" feedback="true" />
+							</p:column>
+						</p:panelGrid>
+
+						<p:commandButton value="Salvar"
+							actionListener="#{usuarioController.salvar}"
+							update="formPrincipal" />
+					</p:panel>
+
+				</p:panel>
+
+
+			</h:form>
+		</DIV>
+		<DIV id="rodape">Copyright Banco da Amazônia S/A - GSIST/CSCOM ©
+		</DIV>
+	</div>
+
+</h:body>
+</html>

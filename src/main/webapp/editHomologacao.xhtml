@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="WEB-INF/templates/header.xhtml" />
+
+		<ui:include src="WEB-INF/templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formEditHml">
+				<p:panel header="Homologações de Cobrança">
+					<p:panelGrid columns="2" id="gridFrmHmlEdit"
+						columnClasses="label2,value">
+						<p:column>
+							<h:outputText value="Empresa:" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{homologacaoController.homologacao.empresa.siscad} - #{homologacaoController.homologacao.empresa.nome}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Unidade:" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{homologacaoController.homologacao.agencia.numero} - #{homologacaoController.homologacao.agencia.nome}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Padrão:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu
+								value="#{homologacaoController.homologacao.padrao}">
+
+								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItem itemValue="CNAB240" itemLabel="CNAB 240" />
+								<f:selectItem itemValue="CNAB400" itemLabel="CNAB 400" />
+
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Opção:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu
+								value="#{homologacaoController.homologacao.opcao}">
+								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItem itemValue="Pre-Impressa"
+									itemLabel="Pré-Impressa" />
+								<f:selectItem itemValue="Simples"
+									itemLabel="Simples" />
+
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column rendered="#{homologacaoController.homologacao.opcao.equals('Simples')?false:true}">
+							<h:outputText value="Faixa NN Homologação:" />
+						</p:column>
+						<p:column rendered="#{homologacaoController.homologacao.opcao.equals('Simples')?false:true}">
+
+							<p:inputText
+								value="#{homologacaoController.homologacao.faixaIniHml}" /> -
+								<p:inputText
+								value="#{homologacaoController.homologacao.faixaFimHml}" />
+
+
+						</p:column>
+
+						<p:column
+							rendered="#{homologacaoController.homologacao.situacao.equals('Concluido')?true:false}">
+							<h:outputText value="Faixa de NN Produção:" />
+						</p:column>
+						<p:column
+							rendered="#{homologacaoController.homologacao.situacao.equals('Concluido')?true:false}">
+
+
+							<p:inputText
+								value="#{homologacaoController.homologacao.faixaIniProd}" /> - 
+									<p:inputText
+								value="#{homologacaoController.homologacao.faixaFimProd}" />
+
+
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Convenio:" />
+						</p:column>
+						<p:column>
+							<p:inputText
+								value="#{homologacaoController.homologacao.convenio}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Analista Responsável:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu
+								value="#{homologacaoController.homologacao.analista}"
+								converter="convAnalista">
+								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItems value="#{homologacaoController.analistas}"
+									var="anl" itemLabel="#{anl.nome}" itemValue="#{anl}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Data Início:" />
+						</p:column>
+						<p:column>
+							<p:calendar converter="converteData"
+								value="#{homologacaoController.homologacao.dataInicio}"
+								showOn="button" pattern="dd/MM/yyyy">
+
+							</p:calendar>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Chamado:" />
+						</p:column>
+						<p:column>
+							<p:inputText value="#{homologacaoController.homologacao.chamado}" />
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<p:commandButton value="Atualizar" ajax="false"
+						action="#{homologacaoController.update}" />
+						&nbsp;
+					<p:commandButton value="Cancelar" 
+						action="#{homologacaoController.cancela}" immediate="true" ajax="false" />
+					<br />
+					<p:messages autoUpdate="true" />
+				</p:panel>
+
+
+
+			</h:form>
+		</DIV>
+		<ui:include src="WEB-INF/templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>
