@@ -143,6 +143,7 @@ public class HomologacaoController {
 
 	public String adicionar() {
 		try {
+			System.out.println("Usuario atualizador->"+hml_situacao.getUsuario().getUsername());
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 			EntityManager manager = JpaUtil.getEntityManager();
@@ -155,8 +156,6 @@ public class HomologacaoController {
 			hml_situacao.setHomologacao(homologacao);
 			// hml_situacao.setSituacao(hml_situacao.getSituacao());
 			hml_situacao.setDataAtualizacao(new Date());
-			System.out.println("id_Homologacao ===>" + hml_situacao.getHomologacao());
-			System.out.println("id_Situacao ===>" + hml_situacao.getSituacao());
 			manager.persist(hml_situacao);
 			userTransaction.commit();
 			manager.close();
@@ -200,28 +199,21 @@ public class HomologacaoController {
 	}
 
 	public void novo() {
-		/*
-		 * SecurityContext context = SecurityContextHolder.getContext(); if
-		 * (context instanceof SecurityContext) { Authentication authentication
-		 * = context.getAuthentication(); if (authentication instanceof
-		 * Authentication) { usuario.setUsername(((User)
-		 * authentication.getPrincipal()) .getUsername()); } }
-		 */
-		this.hml_situacao.setUsuario(usuario);
+		
+		this.hml_situacao.setObservacao(null);
+		this.hml_situacao.setSituacao(new Situacao());
 
-		System.out.println("Usuario----------------->" + this.hml_situacao.getUsuario().getUsername());
-		System.out.println("Homologação----------------->" + this.hml_situacao.getHomologacao().getIdHomologacao());
-		System.out.println("Situação----------------->" + this.hml_situacao.getSituacao());
 
 	}
 
 	public void add() {
+		System.out.println("Id da Homologação: "+this.hml_situacao.getHomologacao().getIdHomologacao());
+		System.out.println("Id da Situação: "+this.hml_situacao.getSituacao().getIdSituacao());
+		System.out.println("Usuario do Sistema: "+this.hml_situacao.getUsuario().getUsername());
+		System.out.println("Observação: "+this.hml_situacao.getObservacao());
 		try {
-			System.out.println("Usuario----------------->" + this.usuario.getUsername());
-			// System.out.println("Arquivo----------------->"+this.getHml_situacao().getArquivo().getId());
-			// hml_situacao.setIdHmlSit(null);
-			// hml_situacao = new Hml_Situacao();
-
+			
+			
 			this.hml_situacao.setDataAtualizacao(new Date());
 			this.hml_situacao.getHomologacao().setSituacaoAtual(this.hml_situacao.getSituacao().getDescricao());
 			this.hml_situacao.getHomologacao().setDataAtualizacaoSituacao(this.hml_situacao.getDataAtualizacao());
@@ -595,97 +587,37 @@ public class HomologacaoController {
 
 		this.opcao = null;
 		this.homologacao = new Homologacao();
+		getTodas();
 	}
 
 	// lista datatable
 	public List<Homologacao> getTodas() {
 		EntityManager manager = JpaUtil.getEntityManager();
 		try {
-			/*
-			 * if (this.opcao != null && this.opcao != "") { Query query =
-			 * manager .createQuery(
-			 * "from Homologacao h where h.opcao=:op order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("op", this.opcao);
-			 * 
-			 * tamanho = query.getResultList(); }
-			 * 
-			 * else if (this.homologacao.getEmpresa() != null) { Query query =
-			 * manager .createQuery(
-			 * "from Homologacao h where h.empresa.nome=:nome order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("nome", this.homologacao.getEmpresa()
-			 * .getNome());
-			 * 
-			 * tamanho = query.getResultList(); } else if
-			 * (this.homologacao.getAgencia() != null) { Query query = manager
-			 * .createQuery(
-			 * "from Homologacao h where h.agencia.numero=:numero order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("numero", this.homologacao.getAgencia()
-			 * .getNumero());
-			 * 
-			 * tamanho = query.getResultList(); } else if
-			 * (this.homologacao.getPadrao() != null &&
-			 * this.homologacao.getPadrao() != "") {
-			 * 
-			 * Query query = manager .createQuery(
-			 * "from Homologacao h where h.padrao=:padrao order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("padrao", this.homologacao.getPadrao());
-			 * 
-			 * tamanho = query.getResultList(); } else if
-			 * ((this.homologacao.getFaixaIniProd() != 0 ||
-			 * this.homologacao.getFaixaFimProd() != 0) &&
-			 * (this.homologacao.getFaixaIniProd() !=
-			 * this.homologacao.getFaixaFimProd())){ Query query = manager
-			 * .createQuery(
-			 * "from Homologacao h where h.faixaIniProd>=:inicial and h.faixaFimProd<=:final order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("inicial",
-			 * this.homologacao.getFaixaIniProd()); query.setParameter("final",
-			 * this.homologacao.getFaixaFimProd());
-			 * 
-			 * tamanho = query.getResultList(); } else if
-			 * ((this.homologacao.getFaixaIniProd() ==
-			 * this.homologacao.getFaixaFimProd()) &&
-			 * (this.homologacao.getFaixaIniProd() != 0 &&
-			 * this.homologacao.getFaixaFimProd() != 0)){ Query query = manager
-			 * .createQuery(
-			 * "from Homologacao h where h.faixaIniProd between 1000000 and :inicial and h.faixaFimProd>=:final order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("inicial",
-			 * this.homologacao.getFaixaIniProd()); query.setParameter("final",
-			 * this.homologacao.getFaixaFimProd());
-			 * 
-			 * tamanho = query.getResultList(); } else
-			 * if(this.homologacao.getSituacao() != null &&
-			 * this.homologacao.getSituacao() != ""){ Query query = manager
-			 * .createQuery(
-			 * "from Homologacao h where h.situacao=:situacao order by h.dataInicio desc, h.empresa.nome"
-			 * ); query.setParameter("situacao",
-			 * this.homologacao.getSituacao());
-			 * 
-			 * tamanho = query.getResultList(); }
-			 */
+			
 			if ((this.homologacao.getFaixaIniProd() != 0 || this.homologacao.getFaixaFimProd() != 0)
 					&& (this.homologacao.getFaixaIniProd() != this.homologacao.getFaixaFimProd())) {
 				Query query = manager.createQuery(
 						"from Homologacao h where h.faixaIniProd>=:inicial and h.faixaFimProd<=:final order by h.dataInicio desc, h.empresa.nome");
 				query.setParameter("inicial", this.homologacao.getFaixaIniProd());
 				query.setParameter("final", this.homologacao.getFaixaFimProd());
+				return query.getResultList();
 
-				tamanho = query.getResultList();
 			} else if ((this.homologacao.getFaixaIniProd() == this.homologacao.getFaixaFimProd())
 					&& (this.homologacao.getFaixaIniProd() != 0 && this.homologacao.getFaixaFimProd() != 0)) {
 				Query query = manager.createQuery(
 						"from Homologacao h where h.faixaIniProd between 1000000 and :inicial and h.faixaFimProd>=:final order by h.dataInicio desc, h.empresa.nome");
 				query.setParameter("inicial", this.homologacao.getFaixaIniProd());
 				query.setParameter("final", this.homologacao.getFaixaFimProd());
+				return query.getResultList();
 
-				tamanho = query.getResultList();
 			} else {
 				TypedQuery<Homologacao> query = manager.createQuery(
 						"from Homologacao h order by h.dataInicio desc, h.empresa.nome", Homologacao.class);
-				tamanho = query.getResultList();
+
 				return query.getResultList();
 			}
 
-			return tamanho;
 
 		} finally {
 			manager.close();
@@ -852,7 +784,7 @@ public class HomologacaoController {
 		EntityManager manager = JpaUtil.getEntityManager();
 		try {
 			TypedQuery<Hml_Situacao> query = manager.createQuery(
-					"from Hml_Situacao h WHERE h.homologacao.idHomologacao = :idHomologacao ORDER BY h.dataAtualizacao",
+					"from Hml_Situacao h WHERE h.homologacao.idHomologacao = :idHomologacao ORDER BY h.dataAtualizacao desc",
 					Hml_Situacao.class);
 			query.setParameter("idHomologacao", hml_situacao.getHomologacao().getIdHomologacao());
 			homologacoes = query.getResultList();
@@ -866,6 +798,8 @@ public class HomologacaoController {
 	public void setHomologacoes(List<Hml_Situacao> homologacoes) {
 		this.homologacoes = homologacoes;
 	}
+	
+	
 
 	public Hml_Situacao getHml_situacao() {
 		return hml_situacao;
@@ -911,9 +845,9 @@ public class HomologacaoController {
 		this.hmls = hmls;
 	}
 
-	public int getTamanho() {
+	/*public int getTamanho() {
 		return this.tamanho.size();
-	}
+	}*/
 
 	public void setTamanho(List<Homologacao> tamanho) {
 		this.tamanho = tamanho;

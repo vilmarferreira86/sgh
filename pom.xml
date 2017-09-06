@@ -229,7 +229,7 @@
 		<!-- THEMES PRIMEFACES -->
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
-			<artifactId>rocket</artifactId>
+			<artifactId>south-street</artifactId>
 			<version>1.0.8</version>
 		</dependency>
 

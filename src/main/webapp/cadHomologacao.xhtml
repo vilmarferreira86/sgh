@@ -26,18 +26,15 @@
 							<h:outputText value="Opção:" />
 						</p:column>
 						<p:column>
-							<p:selectOneMenu required="true" requiredMessage="Opção da CR é obrigatória!!!"
+							<p:selectOneMenu required="true"
+								requiredMessage="Opção da CR é obrigatória!!!"
 								value="#{homologacaoController.homologacao.opcao}">
 								<p:ajax listener="#{homologacaoController.displayNN}"
 									update="formcadHml" />
 								<f:selectItem itemValue="" itemLabel="Selecione..." />
-								<f:selectItem
-									itemValue="Pre-Impressa"
-									itemLabel="Pré-Impressa" />
-								<f:selectItem
-									itemValue="Simples"
-									itemLabel="Simples" />
-								
+								<f:selectItem itemValue="Pre-Impressa" itemLabel="Pré-Impressa" />
+								<f:selectItem itemValue="Simples" itemLabel="Simples" />
+
 							</p:selectOneMenu>
 						</p:column>
 
@@ -108,9 +105,11 @@
 							</legend>
 							<p:panelGrid columns="4">
 								<h:outputText value="De:" style="font-weight:bold;" />
-								<p:inputText value="#{homologacaoController.homologacao.faixaIniHml}" />
+								<p:inputText
+									value="#{homologacaoController.homologacao.faixaIniHml}" />
 								<h:outputText value="Para:" style="font-weight:bold;" />
-								<p:inputText value="#{homologacaoController.homologacao.faixaFimHml}" />
+								<p:inputText
+									value="#{homologacaoController.homologacao.faixaFimHml}" />
 							</p:panelGrid>
 
 						</fieldset>
@@ -164,15 +163,27 @@
 						</p:column>
 						<p:column>
 							<p:inputTextarea
-								value="#{homologacaoController.hml_situacao.observacoes}" />
+								value="#{homologacaoController.hml_situacao.observacao}" />
 						</p:column>
+
+						<p:column>
+							<h:outputText value="Usuário:" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{usuarioController.usuario.username}" />
+						</p:column>
+
 
 					</p:panelGrid>
 					<br />
 					<p:commandButton value="Salvar"
-						action="#{homologacaoController.adicionar}" />
+						action="#{homologacaoController.adicionar}" ajax="false">
+						<f:setPropertyActionListener value="#{usuarioController.usuario}"
+							target="#{homologacaoController.hml_situacao.usuario}"></f:setPropertyActionListener>
+					</p:commandButton>
 					<p:commandButton value="Cancelar"
-						action="#{homologacaoController.cancela}" immediate="true" />
+						action="#{homologacaoController.cancela}" immediate="true"
+						ajax="false" />
 					<p:messages autoUpdate="true" />
 				</p:panel>
 

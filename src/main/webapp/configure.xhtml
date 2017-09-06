@@ -196,7 +196,7 @@
 								<h:outputText value="#{h.situacao.descricao}" />
 							</p:column>
 							<p:column headerText="Observação">
-								<h:outputText value="#{h.observacoes}" />
+								<h:outputText value="#{h.observacao}" />
 							</p:column>
 							<p:column headerText="Usuário">
 								<h:outputText value="#{h.usuario.username}" />
@@ -236,10 +236,10 @@
 						</p:dataTable>
 
 						<p:commandButton icon="ui-icon-document" value="Novo"
-							alt="Nova Situação" title="Nova Situação"
-							actionListener="#{homologacaoController.novo}"
+							alt="Nova Situação" title="Nova Situação" actionListener="#{homologacaoController.novo()}"
 							update=":formconfHml:hmlDetail"
 							oncomplete="PF('hmlDialog').show()">
+							
 						</p:commandButton>
 
 
@@ -270,22 +270,24 @@
 							<h:selectOneMenu style="text-align:left;align:left;"
 								value="#{homologacaoController.hml_situacao.situacao}"
 								converter="convSituacao">
-								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItem itemValue="#{null}" itemLabel="Selecione..." />
 								<f:selectItems value="#{homologacaoController.situacoes}"
 									var="sit" itemLabel="#{sit.descricao}" itemValue="#{sit}" />
 							</h:selectOneMenu>
 
 							<h:outputText value="Observação:" style="font-weight:bold;" />
-							<p:inputTextarea
-								value="#{homologacaoController.hml_situacao.observacoes}"
-								style="width:400px;" />
+							<p:inputTextarea 
+								value="#{homologacaoController.hml_situacao.observacao}"/>
 
-
+							<h:outputText value="Usuário:" />
+							<h:outputText value="#{usuarioController.usuario.username}" />
 
 							<p:commandButton value="Salvar" icon="ui-icon-disk"
 								action="#{homologacaoController.add}"
-								update=":formconfHml:dataHml_Sit"
-								onsuccess="PF('hmlDialog').hide()" />
+								update=":formconfHml:dataHml_Sit" ajax="false"
+								onsuccess="PF('hmlDialog').hide()">
+								<f:setPropertyActionListener value="#{usuarioController.usuario}" target="#{homologacaoController.hml_situacao.usuario}"></f:setPropertyActionListener>
+							</p:commandButton>
 							<p:growl id="messages" showDetail="true" />
 						</p:panelGrid>
 

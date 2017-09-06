@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 public class Hml_Situacao {
 	private Long idHmlSit;
 	
-	private String observacoes;
+	private String observacao;
 	private Date dataAtualizacao;
 	private Homologacao homologacao;
 	private Situacao situacao;
@@ -66,12 +66,12 @@ public class Hml_Situacao {
 		this.usuario = usuario;
 	}
 	
-	@Column(name = "observacao", length = 255)
-	public String getObservacoes() {
-		return observacoes;
+	@Column(name = "observacao", length = 255, nullable=true)
+	public String getObservacao() {
+		return observacao;
 	}
-	public void setObservacoes(String observacoes) {
-		this.observacoes = observacoes;
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 	@Temporal(TemporalType.DATE)
 	@Column(name="data_atualizacao")

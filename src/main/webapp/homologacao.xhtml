@@ -30,7 +30,7 @@
 								<legend>
 									<b>Faixa de Nosso Número</b>
 								</legend>
-								<p:panelGrid columns="4">
+								<p:panelGrid columns="4" id="panelFilter">
 									<p:column>
 										<h:outputText value="De" />
 									</p:column>
@@ -52,14 +52,17 @@
 							</fieldset>
 						</p:panel>
 						<br />
-						<p:commandButton value="Buscar" update="@all" />
+						<p:commandButton value="Buscar" update="dataHomologacao" />
 						<p:commandButton value="Limpar"
-							action="#{homologacaoController.clear}" update="@all" />
+							actionListener="#{homologacaoController.clear}"
+							update="panelFilter,dataHomologacao" />
 					</fieldset>
 					<br />
 					<p:messages autoUpdate="true" />
 					<p:commandButton value="Cadastrar"
-						action="#{homologacaoController.cad}" />
+						action="#{homologacaoController.cad}" ajax="false">
+						
+					</p:commandButton>
 
 
 					<p:commandButton icon="ui-icon-suitcase" value="Concluir"
@@ -71,7 +74,8 @@
 						actionListener="#{homologacaoController.cancelar}"
 						title="Cancelar Homologação" update="dataHomologacao" />
 
-
+					<br />
+					<br />
 					<p:dataTable id="dataHomologacao" paginator="true"
 						value="#{homologacaoController.todas}" var="hm"
 						paginatorPosition="bottom"
@@ -164,10 +168,9 @@
 								<p:selectOneMenu onchange="PF('hmlTable').filter()">
 									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
 										noSelectionOption="true" />
-									<f:selectItem itemLabel="Em Andamento"
-										itemValue="Em Andamento" />
+									<f:selectItem itemLabel="Em Andamento" itemValue="Em Andamento" />
 									<f:selectItem itemLabel="Concluido" itemValue="Concluido" />
-									
+
 								</p:selectOneMenu>
 							</f:facet>
 							<h:outputText value="#{hm.situacao}" />
@@ -198,16 +201,13 @@
 						|	
 							<p:commandButton id="Bconfigure" icon="ui-icon-wrench"
 								alt="Gerenciar" action="#{homologacaoController.configure}"
-								immediate="true" title="Gerenciar">
+								immediate="true" title="Gerenciar" ajax="false">
 								<f:setPropertyActionListener value="#{hm}"
 									target="#{homologacaoController.homologacao}" />
 							</p:commandButton>
 
 						</p:column>
-						<f:facet name="footer">
-        					Total de registro:<h:outputText
-								value="  #{homologacaoController.tamanho}" />
-						</f:facet>
+
 					</p:dataTable>
 				</p:panel>
 
@@ -231,7 +231,7 @@
 
 								<h:outputText value="Cnpj:" style="font-weight:bold;" />
 								<h:outputText
-									value="#{homologacaoController.homologacao.empresa.cnpj}"/>
+									value="#{homologacaoController.homologacao.empresa.cnpj}" />
 
 								<h:outputText value="Agencia:" style="font-weight:bold;" />
 								<h:outputText
@@ -315,7 +315,7 @@
 									<h:outputText value="#{h.situacao.descricao}" />
 								</p:column>
 								<p:column headerText="Observação">
-									<h:outputText value="#{h.observacoes}" />
+									<h:outputText value="#{h.observacao}" />
 								</p:column>
 								<p:column headerText="Data">
 									<h:outputText value="#{h.dataAtualizacao}">

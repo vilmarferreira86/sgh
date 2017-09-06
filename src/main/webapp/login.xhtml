@@ -29,20 +29,20 @@
 					visible="true">
 
 					<center>
-						<h:outputText value="Usuário e/  ou senha inválidos!"
-							rendered="#{param.error}"
+						<h:outputText 
 							style="color:darkred; font-size: 14px; padding-bottom: 10px;" />
-						<form action="j_spring_security_check" method="post">
+						<h:form>
 							<h:panelGrid columns="2" cellpadding="3"
 								style="font-weight: bold;">
 								<h:outputLabel for="j_username" value="* Usuário:" />
-								<h:inputText id="j_username" size="15" />
+								<h:inputText id="j_username" value="#{usuarioController.usuario.username}" size="15" />
 
 								<h:outputLabel for="j_password" value="* Senha:" />
-								<h:inputSecret id="j_password" size="15" />
+								<h:inputSecret id="j_password" value="#{usuarioController.usuario.password}" size="15" />
 							</h:panelGrid>
-							<h:commandButton value="Entrar"/>
-						</form>
+							<p:commandButton value="Entrar" action="#{usuarioController.login()}" ajax="false"/>
+							<h:messages />
+						</h:form>
 
 					</center>
 				</p:dialog>
