@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="templates/header.xhtml" />
+
+		<ui:include src="templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formAgencia">
+				<p:panel header="Gestores">
+					<p:panelGrid columns="2" id="gridFormulario">
+						<h:outputText value="Sigla:" />
+						<p:inputText id="sigla" style="width:80px;"
+							value="#{gestorController.gestor.sigla}" required="true"
+							requiredMessage="Sigla do gestor é obrigatório!" />
+
+
+
+						<h:outputText value="Descrição:" />
+						<p:inputText id="descricao" style="width:300px;"
+							value="#{gestorController.gestor.descricao}" required="true"
+							requiredMessage="Descrição do gestor é obrigatório!" />
+
+
+
+
+
+						<p:commandButton value="Cadastrar"
+							actionListener="#{gestorController.adicionar}"
+							update="dataGestor,gridFormulario" />
+
+					</p:panelGrid>
+				</p:panel>
+				<p:messages id="mensagem" autoUpdate="true" />
+				<br />
+				<p:dataTable id="dataGestor" value="#{gestorController.todas}"
+					paginatorPosition="bottom" editable="true" var="g" border="1"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50"
+					rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+					rowIndexVar="rowIx">
+					<p:column headerText="Sigla">
+						<h:outputText value="#{g.sigla}" />
+					</p:column>
+
+					<p:column headerText="Descrição">
+						<h:outputText value="#{g.descricao}" />
+					</p:column>
+
+					<p:column width="10%" headerText="Operações">
+
+						<p:commandButton id="linkEdit" immediate="true"
+							alt="Editar Registro" title="Editar Registro"
+							action="#{gestorController.editar}" icon="ui-icon-pencil">
+							<f:setPropertyActionListener value="#{g}"
+								target="#{gestorController.gestor}" />
+						</p:commandButton>
+						|
+						<p:commandButton id="linkRemove" icon="ui-icon-trash"
+							immediate="true" alt="Remover Registro" title="Remover Registro"
+							action="#{gestorController.remove}" update="dataGestor">
+							<f:setPropertyActionListener value="#{g}"
+								target="#{gestorController.gestor}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</DIV>
+		<ui:include src="templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

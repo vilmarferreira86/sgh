@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+
+		<div id="geral">
+			<ui:include src="templates/header.xhtml" />
+
+			<ui:include src="templates/menu.xhtml" />
+
+
+			<div id="main">
+
+				<p:panel header="Principal">
+					<h:outputText value="Ola #{usuarioController.usuario.nome} seja bem vindo ao Sistema de Gerenciamento de Homologações" />
+					
+				</p:panel>
+			</div>
+			<ui:include src="templates/footer.xhtml" />
+
+		</div>
+		<!-- fim do div geral -->
+</h:body>
+
+</html>

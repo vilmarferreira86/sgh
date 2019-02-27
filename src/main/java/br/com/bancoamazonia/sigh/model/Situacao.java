@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +41,7 @@ public class Situacao {
 	}
 	
 	
-	@OneToMany(mappedBy = "situacao", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "situacao", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	public List<Hml_Situacao> getHmlSituacoes() {
 		return hmlSituacoes;
 	}

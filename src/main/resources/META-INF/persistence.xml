@@ -27,7 +27,8 @@
 				value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
 			<!-- Properties for Hibernate -->
 			<property name="hibernate.hbm2ddl.auto" value="none" />
-			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
 		</properties>
 
 

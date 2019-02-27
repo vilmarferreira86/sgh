@@ -36,4 +36,15 @@
     <servlet-name>AdminServlet</servlet-name>
     <url-pattern>/servlet/AdminServlet</url-pattern>
   </servlet-mapping>
+  <filter>
+  	<filter-name>PageFilter</filter-name>
+  	<filter-class>br.com.bancoamazonia.sigh.util.PageFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>PageFilter</filter-name>
+  	<url-pattern>/usr/*</url-pattern>
+  </filter-mapping>
+  <session-config>
+  	<session-timeout>60</session-timeout>
+  </session-config>
 </web-app>

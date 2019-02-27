@@ -1,5 +1,6 @@
 package br.com.bancoamazonia.sigh.model;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +31,32 @@ public class Empresa {
 	private String nomeRespAgencia;
 	private String telefoneRespAgencia;
 	private String emailRespAgencia;
+	
+
+	public Empresa() {}
+	public Empresa(Long idEmpresa, int siscad, String cnpj, String nome, int conta, String nomeContato, String telefone,
+			String email, String nomeAnalista, String contatoAnalista, String emailAnalista, String nomeResponsavel,
+			String contatoResponsavel, String emailResponsavel, String nomeRespAgencia, String telefoneRespAgencia,
+			String emailRespAgencia) {
+		super();
+		this.idEmpresa = idEmpresa;
+		this.siscad = siscad;
+		this.cnpj = cnpj;
+		this.nome = nome;
+		this.conta = conta;
+		this.nomeContato = nomeContato;
+		this.telefone = telefone;
+		this.email = email;
+		this.nomeAnalista = nomeAnalista;
+		this.contatoAnalista = contatoAnalista;
+		this.emailAnalista = emailAnalista;
+		this.nomeResponsavel = nomeResponsavel;
+		this.contatoResponsavel = contatoResponsavel;
+		this.emailResponsavel = emailResponsavel;
+		this.nomeRespAgencia = nomeRespAgencia;
+		this.telefoneRespAgencia = telefoneRespAgencia;
+		this.emailRespAgencia = emailRespAgencia;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sequence_empresa")

@@ -1,0 +1,383 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="templates/header.xhtml" />
+
+		<ui:include src="templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="form">
+				<p:panel header="Homologacoes de Sistemas">
+					<p:messages autoUpdate="true" />
+					<br />
+					<p:tabView dynamic="true" id="tab">
+						<p:tab id="tab1" title="Chamados">
+
+							<p:panel id="panelData">
+
+								<p:commandButton value="Cadastrar"
+									action="#{homologacaoSistemaController.cadastrar()}"
+									ajax="false" />
+									&nbsp;
+								<p:commandButton value="Vincular SDM"
+									action="#{homologacaoSistemaController.validaVinculacao()}"
+									ajax="false" />
+
+
+								<p:dataTable id="dataHomologacao" paginator="true"
+									widgetVar="dataTable"
+									value="#{homologacaoSistemaController.todas}" var="hm"
+									paginatorPosition="bottom"
+									filteredValue="#{homologacaoSistemaController.hmls}" rows="20"
+									rowsPerPageTemplate="20,40,100"
+									rowKey="#{hm.idHomologaoSistemas}"
+									selection="#{homologacaoSistemaController.selectedHmls}"
+									lazy="false">
+									<f:facet name="header">
+
+
+
+										<h:outputText value="Funcionalidades Registradas" />
+
+									</f:facet>
+
+
+									<p:column selectionMode="multiple" style="width:3%" />
+
+									<p:column headerText="Sistema" style="width:10%;">
+										<h:outputText value="#{hm.sistemas.nome}" />
+									</p:column>
+
+
+									<p:column headerText="Gestor" style="width:8%;">
+										<h:outputText value="#{hm.gestores.sigla}" />
+									</p:column>
+
+									<p:column headerText="Chamado" filterBy="#{hm.chamado}"
+										filterMatchMode="contains" style="width:12%">
+										<f:facet name="filter">
+											<p:inputText id="chamadoFilter"
+												onchange="PF('dataTable').filter()" style="width:110px" />
+										</f:facet>
+										<h:outputText value="#{hm.chamado}" />
+									</p:column>
+
+									<p:column headerText="SDM" filterBy="#{hm.sdm.numero}"
+										filterMatchMode="exact" style="width:12%;" sortBy="#{hm.sdm.numero}">
+										<f:facet name="filter">
+											<p:inputText id="sdmFilter"
+												onchange="PF('dataTable').filter()" style="width:110px" />
+										</f:facet>
+										<h:outputText value="#{hm.sdm.numero}" />
+									</p:column>
+
+
+
+									<p:column headerText="Situação"
+										filterBy="#{hm.situacoes.descricao}" filterMatchMode="exact"
+										style="width:14%;">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTable').filter()">
+												<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItem itemLabel="Desenvolvimento"
+													itemValue="Desenvolvimento" />
+												<f:selectItem itemLabel="Homologado" itemValue="Homologado" />
+												<f:selectItem itemLabel="Em Homologação"
+													itemValue="Em Homologação" />
+												<f:selectItem itemLabel="Testes/Validação"
+													itemValue="Testes/Validação" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{hm.situacoes.descricao}" />
+									</p:column>
+
+									<p:column headerText="Tipo" style="width:7%;">
+										<h:outputText value="#{hm.tipo}" />
+
+									</p:column>
+
+									<p:column headerText="Data" style="width:8%;">
+										<h:outputText value="#{hm.dataInicio}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+									</p:column>
+
+									<p:column headerText="Título" filterBy="#{hm.titulo}"
+										filterMatchMode="contains" style="width:20%;">
+										<h:outputText value="#{hm.titulo}" />
+									</p:column>
+
+
+
+									<p:column headerText="Operações">
+
+
+										<p:commandButton id="Bedit" ajax="false"
+											action="#{homologacaoSistemaController.editar}"
+											icon="ui-icon-pencil" immediate="true" alt="Editar Registro"
+											title="Editar Registro">
+											<f:setPropertyActionListener value="#{hm}"
+												target="#{homologacaoSistemaController.hsistemas}" />
+										</p:commandButton>
+						|
+						<p:commandButton id="Bremove" icon="ui-icon-trash"
+											alt="Remover Registro" title="Remover Registro"
+											action="#{homologacaoSistemaController.remove}"
+											update="dataHomologacao" immediate="true">
+											<p:confirm header="Confirme a Exclusão"
+												message="Tem certeza que deseja excluir este registro?"
+												icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{hm}"
+												target="#{homologacaoSistemaController.hsistemas}" />
+										</p:commandButton>
+										|
+										<p:commandButton icon="ui-icon-search"
+											oncomplete="PF('hmlDialog').show()" update=":form:hmlDetail">
+											<f:setPropertyActionListener value="#{hm}"
+												target="#{homologacaoSistemaController.hsistemas}" />
+										</p:commandButton>
+
+
+									</p:column>
+
+									<f:facet name="footer">
+        					Total de registro:<h:outputText
+											value="   #{homologacaoSistemaController.tamanho}" />
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+
+
+						</p:tab>
+
+						<p:tab title="SDM">
+
+							<p:panel>
+								<p:commandButton value="Cadastrar" action="cadSdm" ajax="false"/>
+								&nbsp;
+								<p:commandButton value="Executar"
+									actionListener="#{sdmController.executaSdm}"/>
+
+								<p:dataTable id="dataSdm" value="#{sdmController.todas}" var="s"
+									border="1" filteredValue="#{sdmController.sdms}"
+									rowsPerPageTemplate="20,40,100" paginator="true"
+									rowKey="#{s.id_sdm}" widgetVar="dataTableSdm"
+									selection="#{sdmController.selectedSdms}" lazy="false">
+									<p:column selectionMode="multiple" style="width:5%;" />
+
+									<p:column headerText="Número" filterBy="#{s.numero}"
+										filterMatchMode="contains" style="width:12%">
+										<h:outputText value="#{s.numero}"
+											onchange="PF('dataTableSdm').filter()" style="width:110px" />
+									</p:column>
+
+									<p:column headerText="Tipo" filterBy="#{s.tipo}"
+										filterMatchMode="exact" style="width:14%;">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTableSdm').filter();"
+												style="width:120px;">
+												<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItem itemLabel="Ambas" itemValue="Ambas" />
+												<f:selectItem itemLabel="Corretiva" itemValue="Corretiva" />
+												<f:selectItem itemLabel="Evolutiva" itemValue="Evolutiva" />
+
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{s.tipo}" />
+									</p:column>
+
+									<p:column headerText="Título" filterBy="#{s.titulo}"
+										filterMatchMode="contains" style="width:20%;">
+										<h:outputText value="#{s.titulo}" />
+									</p:column>
+
+
+
+									<p:column headerText="Situação" filterBy="#{s.situacao}"
+										filterMatchMode="exact" style="width:14%;">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('dataTableSdm').filter();"
+												style="width:120px;">
+												<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItem itemLabel="Aberta" itemValue="Aberta" />
+												<f:selectItem itemLabel="Executada" itemValue="Executada" />
+												<f:selectItem itemLabel="Pendente" itemValue="Pendente" />
+
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{s.situacao}" />
+									</p:column>
+
+									<p:column headerText="Data Início">
+										<h:outputText value="#{s.dataInicio}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="Data Execução">
+										<h:outputText value="#{s.dataExc}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column width="10%" headerText="Operações">
+
+										<p:commandButton id="Bedit" icon="ui-icon-pencil" ajax="false"
+											alt="Editar Registro" title="Editar Registro"
+											action="#{sdmController.editar()}">
+											<f:setPropertyActionListener value="#{s}"
+												target="#{sdmController.sdm}" />
+										</p:commandButton>
+						|
+						<p:commandButton id="Bremove" icon="ui-icon-trash"
+											alt="Remover Registro" title="Remover Registro"
+											action="#{sdmController.remove}" update="dataSdm"
+											immediate="true">
+											<p:confirm header="Confirme a Exclusão"
+												message="Tem certeza que deseja excluir este registro?"
+												icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{s}"
+												target="#{sdmController.sdm}" />
+										</p:commandButton>
+										
+										|
+										<p:commandButton icon="ui-icon-search"
+											oncomplete="PF('sdmDialog').show()" update=":form:sdmDetail">
+											<f:setPropertyActionListener value="#{s}"
+												target="#{sdmController.sdm}" />
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</p:tab>
+
+					</p:tabView>
+
+				</p:panel>
+				<br />
+
+
+
+
+				<p:ajaxStatus onstart="PF('statusDialog').show()"
+					onsuccess="PF('statusDialog').hide()" />
+
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false">
+					<p:graphicImage value="/usr/templates/img/ajax-loader.gif" />
+
+				</p:dialog>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+				<p:dialog header="Informações detalhadas" widgetVar="hmlDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="hmlDetail" style="text-align:center;">
+						<p:panel>
+							<p:panelGrid columns="2">
+								<h:outputText value="Sistema:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.sistemas.nome}" />
+
+								<h:outputText value="Chamado:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.chamado}" />
+
+								<h:outputText value="SDM:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.sdm.numero}" />
+
+								<h:outputText value="Data Incio SDM:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.sdm.dataInicio}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Gestor:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.gestores.sigla}" />
+
+								<h:outputText value="Tipo:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.tipo}" />
+
+								<h:outputText value="Titulo:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.titulo}" />
+
+								<h:outputText value="Descrição:" />
+								<h:outputText
+									value="#{homologacaoSistemaController.hsistemas.descricao}" />
+							</p:panelGrid>
+						</p:panel>
+					</p:outputPanel>
+				</p:dialog>
+
+				<p:dialog header="Informações detalhadas" widgetVar="sdmDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="sdmDetail" style="text-align:center;">
+						<p:panel>
+							<p:panelGrid columns="2">
+								<h:outputText value="Número:" />
+								<h:outputText value="#{sdmController.sdm.numero}" />
+
+								<h:outputText value="Tipo:" />
+								<h:outputText value="#{sdmController.sdm.tipo}" />
+
+								<h:outputText value="Título:" />
+								<h:outputText value="#{sdmController.sdm.titulo}" />
+
+								<h:outputText value="Situação:" />
+								<h:outputText value="#{sdmController.sdm.situacao}" />
+
+								<h:outputText value="Data Início:" />
+								<h:outputText value="#{sdmController.sdm.dataInicio}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Data Execução:" />
+								<h:outputText value="#{sdmController.sdm.dataExc}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Descrição:" />
+								<h:outputText value="#{sdmController.sdm.descricao}" />
+
+								<h:outputText value="Chamados:" />
+								<p:dataList value="#{sdmController.chamados}" var="h">
+									#{h.chamado} - #{h.titulo}
+								</p:dataList>
+							</p:panelGrid>
+						</p:panel>
+					</p:outputPanel>
+				</p:dialog>
+
+
+
+			</h:form>
+		</DIV>
+		<ui:include src="templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

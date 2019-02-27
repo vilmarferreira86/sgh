@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+
+	<div id="menu">
+		<h:form id="frmMenu">
+			<p:menubar>
+
+				<p:menuitem value="Principal" url="/usr/index.jsf" />
+				<p:submenu label="Menu">
+					<p:menuitem value="Agencia" url="/usr/agencia.jsf" />
+					<p:menuitem value="Analista" url="/usr/analista.jsf" />
+					<p:menuitem value="Situacao" url="/usr/situacao.jsf" />
+					<p:menuitem value="Empresa" url="/usr/empresa.jsf" />
+					<p:menuitem value="Gestor" url="/usr/gestor.jsf" />
+
+					<p:menuitem value="Situacao Hml Sistemas"
+						url="/usr/situacaohmlsistemas.jsf" />
+					<p:menuitem value="Sistema" url="/usr/sistema.jsf" />
+
+
+				</p:submenu>
+				<p:submenu label="Homologacoes">
+					<p:menuitem value="CR CNAB" url="/usr/homologacao.jsf" />
+					<p:menuitem value="Configurações" url="#" />
+				</p:submenu>
+				<p:submenu label="Relatorios">
+					<p:menuitem value="Analítico" url="/usr/relatorio.jsf" />
+					<p:menuitem value="Sintético" url="/usr/relatorio.jsf" />
+				</p:submenu>
+
+
+
+				<p:menuitem value="Logout" action="#{usuarioController.doLogout()}" ajax="false"/>
+					
+				
+			</p:menubar>
+
+
+		</h:form>
+
+
+
+
+
+
+	</div>
+
+</h:body>
+</html>

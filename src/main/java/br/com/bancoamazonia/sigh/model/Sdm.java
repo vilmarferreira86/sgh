@@ -114,7 +114,7 @@ public class Sdm implements Serializable {
 	}
 	
 	
-	@OneToMany(mappedBy = "sdm", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sdm", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	public List<Homologacao_Sistemas> getHomologacoes() {
 		return homologacoes;
 	}

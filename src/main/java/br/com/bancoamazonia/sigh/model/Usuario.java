@@ -6,12 +6,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="usuario")
@@ -32,10 +34,17 @@ public class Usuario implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "user_auth", joinColumns = @JoinColumn(name = "user_username"), inverseJoinColumns = @JoinColumn(name = "auth_authority"))
 	private List<Authority> authorities;
-	@OneToMany(mappedBy = "usuario", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "usuario", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Hml_Situacao> hmlSituacoes;
+	@Transient
+	private String nome;
 	
-	
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 	// getters e setters
 	public String getUsername() {
 		return username;

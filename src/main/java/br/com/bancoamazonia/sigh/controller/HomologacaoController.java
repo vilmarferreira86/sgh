@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
+import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
@@ -71,11 +73,17 @@ public class HomologacaoController {
 	// regra de botões
 	private boolean value = false;
 	private boolean valueBottom = true;
+	/**
+	 * 
+	 */
 	private boolean valueNew = false;
 	private boolean valueNN = false;
 	private int faixaInicial;
 	private int faixaFinal;
 	private String opcao;
+	private UsuarioController userMB = (UsuarioController) FacesContext.getCurrentInstance().getExternalContext()
+			.getSessionMap().get("usuarioController");
+
 	@Inject
 	UserTransaction userTransaction;
 	// lista de agências
@@ -93,13 +101,13 @@ public class HomologacaoController {
 	}
 
 	/*
-	 * public void handleFileUpload(FileUploadEvent event) throws IOException {
-	 * try { FacesContext facesContext = FacesContext.getCurrentInstance();
+	 * public void handleFileUpload(FileUploadEvent event) throws IOException { try
+	 * { FacesContext facesContext = FacesContext.getCurrentInstance();
 	 * ServletContext scontext = (ServletContext) facesContext
 	 * .getExternalContext().getContext(); String arquivo =
 	 * scontext.getRealPath("/upload/" + event.getFile().getFileName());
-	 * System.out.println("Arquivo--->" + arquivo); // FileOutputStream fos =
-	 * new FileOutputStream(arquivo); byte[] bytes = IOUtils
+	 * System.out.println("Arquivo--->" + arquivo); // FileOutputStream fos = new
+	 * FileOutputStream(arquivo); byte[] bytes = IOUtils
 	 * .toByteArray(event.getFile().getInputstream()); /* fos.write(bytes);
 	 * fos.flush(); fos.close();
 	 */
@@ -107,17 +115,16 @@ public class HomologacaoController {
 	 * EntityManager manager = JpaUtil.getEntityManager(); EntityTransaction
 	 * transaction = manager.getTransaction(); transaction.begin();
 	 * this.arquivo.setNome(event.getFile().getFileName());
-	 * this.arquivo.setArquivo(bytes);
-	 * this.hml_situacao.setArquivo(this.arquivo);
+	 * this.arquivo.setArquivo(bytes); this.hml_situacao.setArquivo(this.arquivo);
 	 * manager.persist(this.arquivo); transaction.commit(); manager.close();
 	 * FacesMessage message = new FacesMessage("Succesful", event
 	 * .getFile().getFileName() + " is uploaded.");
 	 * FacesContext.getCurrentInstance().addMessage(null, message); } catch
 	 * (FileNotFoundException ex) {
-	 * Logger.getLogger(HomologacaoController.class.getName()).log(
-	 * Level.SEVERE, null, ex); } catch (IOException ex) {
-	 * Logger.getLogger(HomologacaoController.class.getName()).log(
-	 * Level.SEVERE, null, ex); }
+	 * Logger.getLogger(HomologacaoController.class.getName()).log( Level.SEVERE,
+	 * null, ex); } catch (IOException ex) {
+	 * Logger.getLogger(HomologacaoController.class.getName()).log( Level.SEVERE,
+	 * null, ex); }
 	 * 
 	 * }
 	 */
@@ -135,20 +142,23 @@ public class HomologacaoController {
 	 * // this.homologacao = new Homologacao();
 	 * FacesContext.getCurrentInstance().addMessage( null, new
 	 * FacesMessage(FacesMessage.SEVERITY_INFO,
-	 * "Homologação cadastrada com sucesso!", null)); } catch
-	 * (PersistenceException e) { FacesContext.getCurrentInstance().addMessage(
-	 * null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e .getMessage(),
-	 * null)); } return "cadHomologacao"; }
+	 * "Homologação cadastrada com sucesso!", null)); } catch (PersistenceException
+	 * e) { FacesContext.getCurrentInstance().addMessage( null, new
+	 * FacesMessage(FacesMessage.SEVERITY_ERROR, e .getMessage(), null)); } return
+	 * "cadHomologacao"; }
 	 */
 
 	public String adicionar() {
 		try {
-			System.out.println("Usuario atualizador->"+hml_situacao.getUsuario().getUsername());
+			System.out.println("Usuario atualizador->" + hml_situacao.getUsuario().getUsername());
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 			EntityManager manager = JpaUtil.getEntityManager();
-			//EntityTransaction transaction = manager.getTransaction();
-			userTransaction.begin();
+			// EntityTransaction transaction = manager.getTransaction();
+			if (userTransaction.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
+				userTransaction.rollback();
+				userTransaction.begin();
+			}
 			// homologacao.setFaixaNossoNumero(faixaInicial + "-" + faixaFinal);
 			homologacao.setSituacaoAtual(hml_situacao.getSituacao().getDescricao());
 			homologacao.setDataAtualizacaoSituacao(new Date());
@@ -199,40 +209,79 @@ public class HomologacaoController {
 	}
 
 	public void novo() {
-		
-		this.hml_situacao.setObservacao(null);
-		this.hml_situacao.setSituacao(new Situacao());
 
+		this.hml_situacao.setObservacao("");
+		this.hml_situacao.setSituacao(new Situacao());
 
 	}
 
 	public void add() {
-		System.out.println("Id da Homologação: "+this.hml_situacao.getHomologacao().getIdHomologacao());
-		System.out.println("Id da Situação: "+this.hml_situacao.getSituacao().getIdSituacao());
-		System.out.println("Usuario do Sistema: "+this.hml_situacao.getUsuario().getUsername());
-		System.out.println("Observação: "+this.hml_situacao.getObservacao());
-		try {
-			
-			
-			this.hml_situacao.setDataAtualizacao(new Date());
-			this.hml_situacao.getHomologacao().setSituacaoAtual(this.hml_situacao.getSituacao().getDescricao());
-			this.hml_situacao.getHomologacao().setDataAtualizacaoSituacao(this.hml_situacao.getDataAtualizacao());
+		this.hml_situacao.setDataAtualizacao(new Date());
+		this.hml_situacao.getHomologacao().setSituacaoAtual(this.hml_situacao.getSituacao().getDescricao());
+		this.hml_situacao.getHomologacao().setDataAtualizacaoSituacao(this.hml_situacao.getDataAtualizacao());
+		this.usuario = this.userMB.getUsuario();
+		EntityManager manager = JpaUtil.getEntityManager();
 
-			// hml_situacao.setUsuario(usuario);
+		System.out.println(
+				"Obs: " + this.hml_situacao.getObservacao() + " / dataAtl: " + this.hml_situacao.getDataAtualizacao()
+						+ " / Homologacao : " + this.hml_situacao.getHomologacao() + " / Usuario: " + this.usuario);
+		try {
+			this.hml_situacao.setUsuario(this.usuario);
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
-			EntityManager manager = JpaUtil.getEntityManager();
-			userTransaction.begin();
 
-			manager.merge(this.hml_situacao);
+			userTransaction.begin();
+			if (manager.contains(this.hml_situacao)) {
+				manager.merge(this.hml_situacao);
+			} else {
+				/*
+				 * Query q = manager.
+				 * createQuery("INSERT INTO Hml_Situacao(observacao,dataAtualizacao,homologacao,situacao,usuario) SELECT h.observacao, h.dataAtualizacao, h.homologacao, h.situacao, h.usuario"
+				 * +
+				 * " FROM Hml_Situacao h WHERE h.observacao=:obs and h.dataAtualizacao=:data and h.homologacao=:idHml and h.situacao=:idSit and h.usuario=:user"
+				 * ); q.setParameter("obs", this.hml_situacao.getObservacao());
+				 * q.setParameter("data", this.hml_situacao.getDataAtualizacao());
+				 * q.setParameter("idHml", this.hml_situacao.getHomologacao());
+				 * q.setParameter("idSit", this.hml_situacao.getSituacao());
+				 * q.setParameter("user", this.hml_situacao.getUsuario()); q.executeUpdate();
+				 */
+				manager.merge(this.hml_situacao);
+			}
+
 			userTransaction.commit();
 			manager.close();
 
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Homologação cadastrada com sucesso!", null));
-		} catch (Exception e) {
+		} catch (PersistenceException e) {
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, e.getMessage(), null));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RollbackException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (HeuristicMixedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (HeuristicRollbackException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// manager.close();
 		}
 	}
 
@@ -243,7 +292,11 @@ public class HomologacaoController {
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 			EntityManager manager = JpaUtil.getEntityManager();
-			//EntityTransaction transaction = manager.getTransaction();
+			// EntityTransaction transaction = manager.getTransaction();
+			if (userTransaction.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
+				userTransaction.rollback();
+				userTransaction.begin();
+			}
 			userTransaction.begin();
 			System.out.println("RECEBENDO DATA INICIAL ->" + homologacao.getDataInicio());
 			manager.merge(homologacao);
@@ -292,7 +345,7 @@ public class HomologacaoController {
 
 				this.homologacao.setIdHomologacao(this.selectedHmls.get(i).getIdHomologacao());
 				try {
-					
+
 					Context context = new InitialContext();
 					userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 					EntityManager manager = JpaUtil.getEntityManager();
@@ -308,10 +361,9 @@ public class HomologacaoController {
 					q.executeUpdate();
 					userTransaction.commit();
 					manager.close();
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO,
-									"Homologação Concluída! Informe a faixa de NN de produção das cobranças pré-impressas.",
-									null));
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Homologação Concluída! Informe a faixa de NN de produção das cobranças pré-impressas.",
+							null));
 				} catch (PersistenceException e) {
 					FacesContext.getCurrentInstance().addMessage(null,
 							new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -358,7 +410,7 @@ public class HomologacaoController {
 					Context context = new InitialContext();
 					userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 					EntityManager manager = JpaUtil.getEntityManager();
-					//EntityTransaction transaction = manager.getTransaction();
+					// EntityTransaction transaction = manager.getTransaction();
 					userTransaction.begin();
 					// this.homologacao.setConcluida(true);
 					// this.homologacao.setSituacaoAtual("Concluído");
@@ -410,13 +462,22 @@ public class HomologacaoController {
 
 	// atualiza tabela hml_sit da base de dados
 	public String atualizar() {
+		hml_situacao.setDataAtualizacao(new Date());
+		this.usuario = this.userMB.getUsuario();
+		this.hml_situacao.setUsuario(this.usuario);
 		try {
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 			EntityManager manager = JpaUtil.getEntityManager();
-			//EntityTransaction transaction = manager.getTransaction();
+
+			// EntityTransaction transaction = manager.getTransaction();
+			if (userTransaction.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
+				userTransaction.rollback();
+				userTransaction.begin();
+			}
+
 			userTransaction.begin();
-			hml_situacao.setDataAtualizacao(new Date());
+
 			manager.merge(hml_situacao);
 			userTransaction.commit();
 			manager.close();
@@ -462,10 +523,14 @@ public class HomologacaoController {
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 			EntityManager manager = JpaUtil.getEntityManager();
-			//EntityTransaction transaction = manager.getTransaction();
+			// EntityTransaction transaction = manager.getTransaction();
 			System.out.println("idHomologação-->" + homologacao.getIdHomologacao());
 			// hml_situacao.setHomologacao(homologacao);
 
+			if (userTransaction.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
+				userTransaction.rollback();
+				userTransaction.begin();
+			}
 			userTransaction.begin();
 			Object o = manager.merge(homologacao);
 
@@ -531,7 +596,7 @@ public class HomologacaoController {
 			Context context = new InitialContext();
 			userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 			EntityManager manager = JpaUtil.getEntityManager();
-			//EntityTransaction transaction = manager.getTransaction();
+			// EntityTransaction transaction = manager.getTransaction();
 
 			// Object o = manager.merge(hml_situacao);
 
@@ -594,30 +659,14 @@ public class HomologacaoController {
 	public List<Homologacao> getTodas() {
 		EntityManager manager = JpaUtil.getEntityManager();
 		try {
-			
-			if ((this.homologacao.getFaixaIniProd() != 0 || this.homologacao.getFaixaFimProd() != 0)
-					&& (this.homologacao.getFaixaIniProd() != this.homologacao.getFaixaFimProd())) {
-				Query query = manager.createQuery(
-						"from Homologacao h where h.faixaIniProd>=:inicial and h.faixaFimProd<=:final order by h.dataInicio desc, h.empresa.nome");
-				query.setParameter("inicial", this.homologacao.getFaixaIniProd());
-				query.setParameter("final", this.homologacao.getFaixaFimProd());
-				return query.getResultList();
 
-			} else if ((this.homologacao.getFaixaIniProd() == this.homologacao.getFaixaFimProd())
-					&& (this.homologacao.getFaixaIniProd() != 0 && this.homologacao.getFaixaFimProd() != 0)) {
-				Query query = manager.createQuery(
-						"from Homologacao h where h.faixaIniProd between 1000000 and :inicial and h.faixaFimProd>=:final order by h.dataInicio desc, h.empresa.nome");
-				query.setParameter("inicial", this.homologacao.getFaixaIniProd());
-				query.setParameter("final", this.homologacao.getFaixaFimProd());
-				return query.getResultList();
-
-			} else {
-				TypedQuery<Homologacao> query = manager.createQuery(
-						"from Homologacao h order by h.dataInicio desc, h.empresa.nome", Homologacao.class);
-
-				return query.getResultList();
-			}
-
+			TypedQuery<Homologacao> query = manager.createQuery(
+					"select new br.com.bancoamazonia.sigh.model.Homologacao(h.idHomologacao, h.empresa.nome,"
+							+ " h.empresa.siscad, h.empresa.nomeRespAgencia, h.agencia.numero,"
+							+ " h.agencia.nome, h.analista.nome, h.chamado, h.convenio, h.dataInicio,"
+							+ " h.opcao, h.padrao, h.situacao) from Homologacao h order by h.dataInicio desc, h.empresa.nome",
+					Homologacao.class);
+			return query.getResultList();
 
 		} finally {
 			manager.close();
@@ -798,8 +847,6 @@ public class HomologacaoController {
 	public void setHomologacoes(List<Hml_Situacao> homologacoes) {
 		this.homologacoes = homologacoes;
 	}
-	
-	
 
 	public Hml_Situacao getHml_situacao() {
 		return hml_situacao;
@@ -845,9 +892,9 @@ public class HomologacaoController {
 		this.hmls = hmls;
 	}
 
-	/*public int getTamanho() {
-		return this.tamanho.size();
-	}*/
+	/*
+	 * public int getTamanho() { return this.tamanho.size(); }
+	 */
 
 	public void setTamanho(List<Homologacao> tamanho) {
 		this.tamanho = tamanho;
@@ -901,6 +948,14 @@ public class HomologacaoController {
 		this.faixaFinal = faixaFinal;
 	}
 
+	public String getOpcao() {
+		return opcao;
+	}
+
+	public void setOpcao(String opcao) {
+		this.opcao = opcao;
+	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -909,12 +964,12 @@ public class HomologacaoController {
 		this.usuario = usuario;
 	}
 
-	public String getOpcao() {
-		return opcao;
+	public UsuarioController getUserMB() {
+		return userMB;
 	}
 
-	public void setOpcao(String opcao) {
-		this.opcao = opcao;
+	public void setUserMB(UsuarioController userMB) {
+		this.userMB = userMB;
 	}
 
 }

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="templates/header.xhtml" />
+
+		<ui:include src="templates/menu.xhtml" />
+
+		<DIV id="main">
+			<h:form id="formAgencia">
+				<p:panel header="Agências">
+					<p:panelGrid columns="2" id="gridFormulario">
+						<h:outputText value="Número:" />
+						<p:inputText id="numero" style="width:40px;"
+							value="#{agenciaController.agencia.numero}" />
+
+						<h:outputText value="DV:" />
+						<p:inputText id="dv" style="width:30px;"
+							value="#{agenciaController.agencia.digitoVerificador}" />
+
+						<h:outputText value="Nome:" />
+						<p:inputText id="nome" value="#{agenciaController.agencia.nome}"
+							required="true" requiredMessage="Nome da Agência é Obrigatório" />
+
+						<h:outputText value="Cnpj:" />
+						<p:inputText id="CnpjUnidade"
+							value="#{agenciaController.agencia.cnpjUnidade}" />
+
+
+
+						<p:commandButton value="Cadastrar"
+							actionListener="#{agenciaController.adicionar}"
+							update="dataAgencia,gridFormulario" />
+
+					</p:panelGrid>
+				</p:panel>
+				<p:messages id="mensagem" autoUpdate="true" />
+				<br />
+				<p:dataTable id="dataAgencia" value="#{agenciaController.todas}"
+					paginatorPosition="bottom" editable="true" var="ag" border="1"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50"
+					rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+					rowIndexVar="rowIx">
+					<p:column headerText="Numero">
+						<h:outputText value="#{ag.numero}" />-<h:outputText
+							value="#{ag.digitoVerificador}" />
+					</p:column>
+
+					<p:column headerText="Nome">
+						<h:outputText value="#{ag.nome}" />
+					</p:column>
+
+					<p:column width="10%" headerText="Operações">
+
+						<p:commandButton id="linkEdit" immediate="true"
+							alt="Editar Registro" title="Editar Registro"
+							action="#{agenciaController.editar}" icon="ui-icon-pencil">
+							<f:setPropertyActionListener value="#{ag}"
+								target="#{agenciaController.agencia}" />
+						</p:commandButton>
+						|
+						<p:commandButton id="linkRemove" icon="ui-icon-trash"
+							immediate="true" alt="Remover Registro" title="Remover Registro"
+							action="#{agenciaController.remove}" update="dataAgencia">
+							<f:setPropertyActionListener value="#{ag}"
+								target="#{agenciaController.agencia}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</DIV>
+		<ui:include src="templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

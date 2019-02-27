@@ -12,10 +12,19 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 @ManagedBean
 @SessionScoped
@@ -24,7 +33,8 @@ public class AgenciaController {
 	private Agencia agencia = new Agencia();
 	private List<Agencia> agencias;
 	private JpaUtil util;
-
+	@Inject
+	UserTransaction userTransaction;
 	public AgenciaController() {
 
 	}
@@ -35,7 +45,8 @@ public class AgenciaController {
 	}
 
 	// persistindo na base de dados
-	public void adicionar() {
+	public void adicionar() throws NamingException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+		
 		try {
 
 			if (agencia.getNumero() == 0) {
@@ -48,13 +59,16 @@ public class AgenciaController {
 										"Não pode ser cadastrado agência com número igual a 0!!",
 										null));
 			} else {
+				Context context = new InitialContext();
+				userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
 				EntityManager manager = JpaUtil.getEntityManager();
-				EntityTransaction transaction = manager.getTransaction();
-				transaction.begin();
-
+				//EntityTransaction transaction = manager.getTransaction();
+				//transaction.begin();
+				userTransaction.begin();
 				System.out.println("numero agencia ->" + agencia.getNumero());
 				manager.persist(agencia);
-				transaction.commit();
+				//transaction.commit();
+				userTransaction.commit();
 				manager.close();
 
 				this.agencia = new Agencia();

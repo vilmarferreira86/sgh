@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="templates/header.xhtml" />
+
+		<ui:include src="templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formEditAg">
+				<p:panel header="Cadastrar Sdm">
+					<p:panelGrid columns="2" id="gridFrm">
+
+
+						<h:outputText value="Numero:" />
+						<p:inputText id="numero" style="width:80px;"
+							value="#{sdmController.sdm.numero}" required="true"
+							requiredMessage="Numero da Sdm é obrigatório!" />
+
+
+
+						<h:outputText value="Titulo:" />
+						<p:inputText id="titulo" style="width:300px;"
+							value="#{sdmController.sdm.titulo}" required="true"
+							requiredMessage="Titulo da Sdm é obrigatório!" />
+
+						<h:outputText value="Tipo:" />
+						<h:selectOneMenu style="width:120px;"
+							value="#{sdmController.sdm.tipo}">
+							<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItem itemLabel="Ambas" itemValue="Ambas" />
+							<f:selectItem itemLabel="Corretiva" itemValue="Corretiva" />
+							<f:selectItem itemLabel="Evolutiva" itemValue="Evolutiva" />
+
+						</h:selectOneMenu>
+
+						<h:outputText value="Data Início:" />
+						<p:calendar id="dataInicio" showOn="button"
+							value="#{sdmController.sdm.dataInicio}" required="true"
+							requiredMessage="Data de Início da Sdm é obrigatório!" />
+
+						<h:outputText value="Data Execução:" />
+						<p:calendar id="dataExecucao" showOn="button"
+							value="#{sdmController.sdm.dataExc}" />
+
+						<h:outputText value="Situação:" />
+						<h:selectOneMenu style="width:120px;"
+							value="#{sdmController.sdm.situacao}">
+							<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItem itemLabel="Aberta" itemValue="Aberta" />
+							<f:selectItem itemLabel="Executada" itemValue="Executada" />
+							<f:selectItem itemLabel="Pendente" itemValue="Pendente" />
+
+						</h:selectOneMenu>
+						<h:outputText value="Descrição:" />
+						<p:inputTextarea id="descricao"
+							value="#{sdmController.sdm.descricao}" required="true"
+							style="width:400px;"
+							requiredMessage="Descrição da Sdm é obrigatório!" />
+
+					</p:panelGrid>
+					<br />
+					<h:commandButton value="Salvar" action="#{sdmController.adicionar()}" style="border:1px solid black;background-color: #459E00; font-weight:bold; padding: 4px;"/>
+					<h:commandButton value="Cancelar" rendered="true"
+						action="#{sdmController.cancelar()}" style="border:1px solid black;background-color: #459E00; font-weight:bold; padding: 4px;" />
+					<br />
+					<p:messages autoUpdate="true" />
+				</p:panel>
+
+
+
+			</h:form>
+		</DIV>
+		<ui:include src="templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,7 +74,7 @@ public class Homologacao_Sistemas implements Serializable {
 	}
 	
 	
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_analista")
 	public Analista getAnalistas() {
 		return analistas;
@@ -81,7 +82,7 @@ public class Homologacao_Sistemas implements Serializable {
 	public void setAnalistas(Analista analistas) {
 		this.analistas = analistas;
 	}
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_gestor")
 	public Gestor getGestores() {
 		return gestores;
@@ -91,7 +92,7 @@ public class Homologacao_Sistemas implements Serializable {
 	}
 	
 	
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_sistema")
 	public Sistema getSistemas() {
 		return sistemas;
@@ -99,7 +100,7 @@ public class Homologacao_Sistemas implements Serializable {
 	public void setSistemas(Sistema sistemas) {
 		this.sistemas = sistemas;
 	}
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_sit_hml_sistema")
 	public Situacao_Homologacao_Sistema getSituacoes() {
 		return situacoes;
@@ -134,7 +135,7 @@ public class Homologacao_Sistemas implements Serializable {
 		this.titulo = titulo;
 	}
 	
-	@ManyToOne(optional=true)
+	@ManyToOne(optional=true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_sdm",nullable = true)
 	public Sdm getSdm() {
 		return sdm;

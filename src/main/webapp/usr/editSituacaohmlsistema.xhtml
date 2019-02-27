@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Sistema de Controle de Cobranças Banco Amazônia S/A</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" />
+</h:head>
+<h:body>
+	<div id="geral">
+		<ui:include src="templates/header.xhtml" />
+
+		<ui:include src="templates/menu.xhtml" />
+		<DIV id="main">
+			<h:form id="formAgencia">
+				<p:panel header="Situação de Homologações de Sistemas">
+					<p:panelGrid columns="2" id="gridFormulario">
+
+
+						<h:outputText value="Descrição:" />
+						<p:inputText id="descricao" style="width:300px;"
+							value="#{situacaoHmlSistemaController.situacao.descricao}"
+							required="true"
+							requiredMessage="Descrição da Situação é obrigatório!" />
+
+
+
+
+
+						<p:commandButton value="Atualizar"
+							action="#{situacaoHmlSistemaController.update}" />
+						<p:commandButton value="Cancelar"
+							action="#{situacaoHmlSistemaController.cancela}" />
+					</p:panelGrid>
+				</p:panel>
+				<p:messages id="mensagem" autoUpdate="true" />
+
+			</h:form>
+		</DIV>
+		<ui:include src="templates/footer.xhtml" />
+	</div>
+
+</h:body>
+</html>
